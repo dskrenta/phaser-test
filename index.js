@@ -12,7 +12,7 @@ app.get('/', function(req, res){
 io.on('connection', function(socket) {
   socket.emit('welcome', {message: 'Welcome!', id: socket.id});
   socket.on('position update', function(position) {
-    console.log(`x-position: ${position.x}, y-position: ${position.y}`);
+    console.log(`socket-id: ${position.id}, x-position: ${position.x}, y-position: ${position.y}`);
     socket.broadcast.emit('global position update', position);
   });
 });

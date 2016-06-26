@@ -11,6 +11,7 @@
     var socket = io();
     var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-game', { preload: preload, create: create, update: update});
     var sprite;
+    var id;
 
     function preload() {
       game.load.image('mushroom', 'assets/mushroom2.png');
@@ -23,22 +24,22 @@
     function update() {
       if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
           sprite.x -= 4;
-          var position = {x: sprite.x, y: sprite.y};
+          var position = {id: id, x: sprite.x, y: sprite.y};
           socket.emit('position update', position);
       }
       else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
           sprite.x += 4;
-          var position = {x: sprite.x, y: sprite.y};
+          var position = {id: id, x: sprite.x, y: sprite.y};
           socket.emit('position update', position);
       }
       if (game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
           sprite.y -= 4;
-          var position = {x: sprite.x, y: sprite.y};
+          var position = {id: id, x: sprite.x, y: sprite.y};
           socket.emit('position update', position);
       }
       else if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
           sprite.y += 4;
-          var position = {x: sprite.x, y: sprite.y};
+          var position = {id: id, x: sprite.x, y: sprite.y};
           socket.emit('position update', position);
         }
     }
@@ -50,10 +51,11 @@
     socket.on('welcome', function(data) {
       console.log(data.message);
       console.log(data.id);
+      id = data.id;
     });
 
     socket.on('global position update', function(position) {
-      console.log(`x-position: ${position.x}, y-position: ${position.y}`);
+      console.log(`socket-id: ${position.id}, x-position: ${position.x}, y-position: ${position.y}`);
     });
 
     </script>
