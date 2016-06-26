@@ -1,7 +1,7 @@
 {
   "name": "phaser-test",
   "version": "0.0.0",
-  "description": "My first time using phaser.io",
+  "description": "phaser.io, socket.io, express",
   "scripts": {
     "start": "node index.js"
   },
