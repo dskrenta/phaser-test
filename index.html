@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Phaser-test</title>
+  </head>
+  <body>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="http://cdn.jsdelivr.net/phaser/2.5.0/phaser.min.js"></script>
+    <script>
+    var socket = io();
+    var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-game', { preload: preload, create: create, update: update});
+    var sprite;
+
+    function preload() {
+      game.load.image('mushroom', 'assets/mushroom2.png');
+    }
+
+    function create() {
+      sprite = game.add.sprite(rand(), rand(), 'mushroom');
+    }
+
+    function update() {
+      if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+          sprite.x -= 4;
+          var position = {x: sprite.x, y: sprite.y};
+          socket.emit('position update', position);
+      }
+      else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+          sprite.x += 4;
+          var position = {x: sprite.x, y: sprite.y};
+          socket.emit('position update', position);
+      }
+      if (game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+          sprite.y -= 4;
+          var position = {x: sprite.x, y: sprite.y};
+          socket.emit('position update', position);
+      }
+      else if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+          sprite.y += 4;
+          var position = {x: sprite.x, y: sprite.y};
+          socket.emit('position update', position);
+        }
+    }
+
+    function rand() {
+      return Math.floor((Math.random() * 300) + 1);
+    }
+
+    socket.on('welcome', function(data) {
+      console.log(data.message);
+      console.log(data.id);
+    });
+
+    socket.on('global position update', function(position) {
+      console.log(`x-position: ${position.x}, y-position: ${position.y}`);
+    });
+
+    </script>
+  </body>
+</html>
