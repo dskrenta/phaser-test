@@ -12,13 +12,19 @@
     var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-game', { preload: preload, create: create, update: update});
     var sprite;
     var id;
+    var sprites = new Map();
 
     function preload() {
       game.load.image('mushroom', 'assets/mushroom2.png');
     }
 
     function create() {
-      sprite = game.add.sprite(rand(), rand(), 'mushroom');
+      var x, y = rand();
+      sprite = game.add.sprite(x, y, 'mushroom');
+    }
+
+    function drawPlayer() {
+
     }
 
     function update() {
@@ -51,11 +57,17 @@
     socket.on('welcome', function(data) {
       console.log(data.message);
       console.log(data.id);
-      id = data.id;
+      var initialPosition = {id: data.id, x: sprite.x, y: sprite.y};
+      sprites.add(id, {x: intialPosition.x, y: initialPosition.y});
+      socket.emit('new player', initialPosition);
     });
 
     socket.on('global position update', function(position) {
       console.log(`socket-id: ${position.id}, x-position: ${position.x}, y-position: ${position.y}`);
+    });
+
+    socket.on('global initial position', function(initialPosition) {
+      console.log(`Intial Position: ${JSON.stringify(intialPosition)}`);
     });
 
     </script>

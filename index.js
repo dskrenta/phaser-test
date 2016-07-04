@@ -15,6 +15,10 @@ io.on('connection', function(socket) {
     console.log(`socket-id: ${position.id}, x-position: ${position.x}, y-position: ${position.y}`);
     socket.broadcast.emit('global position update', position);
   });
+  socket.on('new player', function(initialPosition) {
+    console.log(`Initial Position: ${JSON.stringify(initialPosition)}`);
+    socket.brodcast.emit('global initial position', initialPosition);
+  });
 });
 
 http.listen(3000, function(){
